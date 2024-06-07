@@ -175,7 +175,7 @@ export default function SignInSide() {
 
 
                                 <Grid item>
-                                    <Link href="/create-account" color="#2196f3" variant="body2" sx={{ '&:hover': { color: '#009dbf' }, fontSize: { xs: '18px' }, ml: 38 }}>
+                                    <Link href="/create-account" color="#2196f3" variant="body2" sx={{ '&:hover': { color: '#009dbf' }, fontSize: { xs: '18px' }, ml: 24 }}>
                                         Criar conta
                                     </Link>
                                 </Grid>
