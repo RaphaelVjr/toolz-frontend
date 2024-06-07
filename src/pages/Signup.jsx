@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { useState } from 'react';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import AppleIcon from '@mui/icons-material/Apple';
 import { Carousel } from 'react-responsive-carousel';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import IconButton from '@mui/material/IconButton';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -25,6 +26,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import banner from '../assets/banner.jpeg'
 import logo from '../assets/image.png'
 import logoDark from '../assets/image-dark.png'
+import Hidden from '@mui/material/Hidden';
 import LockIcon from '@mui/icons-material/LockOutlined'
 
 function Copyright(props) {
@@ -67,7 +69,6 @@ const lightTheme = createTheme({
 });
 
 
-
 export default function SignInSide() {
 
     const items = [
@@ -76,13 +77,42 @@ export default function SignInSide() {
         { title: 'Plataforma de cursos completa', description: 'Lorem ipsum nisl etiam himenaeos ligula augue vehicula gravida tincidunt, etiam magna sapien gravida sodales sed vel pulvinar suspendisse, morbi mi proin urna ornare posuere donec aptent. orci vivamus primis fusce lacinia libero nostra aliquam vestibulum' },
     ];
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const email = data.get('email');
+        const password = data.get('password');
+
+        console.log({ email, password });
+
+        // Define your API endpoint
+        const apiEndpoint = 'http://localhost:3005/login';
+
+        try {
+            // Make a POST request to the login endpoint
+            const response = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            // Parse the JSON response
+            const responseData = await response.json();
+
+            // Check the response status
+            if (response.ok) {
+                toast.success('Logado com sucesso!');
+            } else if (response.status === 401) {
+                toast.error('Email ou senha inválidos');
+            } else {
+                toast.warn('Something Wrong');
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            toast.error('Network error');
+        }
     };
 
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -103,8 +133,11 @@ export default function SignInSide() {
         setDarkMode(!darkMode);
     };
 
+    const hidden = useMediaQuery(theme => lightTheme.breakpoints.up('sm'));
+
     return (
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+            <ToastContainer />
             <Grid container component="main" sx={{ height: '100vh' }}>
                 <CssBaseline />
                 <Grid
@@ -155,47 +188,49 @@ export default function SignInSide() {
                     </Box>
 
 
-                    <div className="container">
-                        <Button variant="contained" color="primary" sx={{ width: '78px', height: '32px', borderRadius: '8px' }}>
-                            Cursos
-                        </Button>
-                        <Carousel
-                            autoPlay={true}
-                            showStatus={false}
-                            interval={3000}
-                            renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                                <div style={{ position: 'absolute', bottom: '10px', right: '80px' }}>
-                                    <button type="button" onClick={onClickHandler} title={label} style={{ background: 'none', border: 'none', outline: 'none', boxShadow: 'none', marginRight: '10px', cursor: 'pointer', display: 'flex', padding: '20px' }}>
-                                        <ArrowBackIosIcon style={{ fontSize: '3rem', color: hasPrev ? 'white' : 'grey' }} />
-                                    </button>
-                                </div>
-                            }
-                            renderArrowNext={(onClickHandler, hasNext, label) =>
-                                <div style={{ position: 'absolute', bottom: '10px', right: '10px' }}>
-                                    <button type="button" onClick={onClickHandler} title={label} style={{ background: 'none', border: 'none', outline: 'none', boxShadow: 'none', cursor: 'pointer', display: 'flex', padding: '20px' }}>
-                                        <ArrowForwardIosIcon style={{ fontSize: '3rem', color: hasNext ? 'white' : 'grey' }} />
-                                    </button>
-                                </div>
-                            }
-                            renderIndicator={(onClickHandler, isSelected, index, label) => {
-                                if (isSelected) {
-                                    return (
-                                        <li style={{ display: 'inline-block', background: '#FFFFFF', width: '128px', height: '6px', marginRight: '10px', marginTop: '32px' }} aria-label={`Selected: ${label} ${index + 1}`} title={`Selected: ${label} ${index + 1}`} />
-                                    );
+                    {hidden && (
+                        <div className="container">
+                            <Button variant="contained" color="primary" sx={{ width: '78px', height: '32px', borderRadius: '8px' }}>
+                                Cursos
+                            </Button>
+                            <Carousel
+                                autoPlay={true}
+                                showStatus={false}
+                                interval={3000}
+                                renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                                    <div style={{ position: 'absolute', bottom: '10px', right: '80px' }}>
+                                        <button type="button" onClick={onClickHandler} title={label} style={{ background: 'none', border: 'none', outline: 'none', boxShadow: 'none', marginRight: '10px', cursor: 'pointer', display: 'flex', padding: '20px' }}>
+                                            <ArrowBackIosIcon style={{ fontSize: '3rem', color: hasPrev ? 'white' : 'grey' }} />
+                                        </button>
+                                    </div>
                                 }
-                                return (
-                                    <li style={{ display: 'inline-block', background: '#222222', width: '128px', height: '6px', marginRight: '10px', marginTop: '32px' }} onClick={onClickHandler} onKeyDown={onClickHandler} value={index} key={index} role="button" tabIndex={0} title={`${label} ${index + 1}`} aria-label={`${label} ${index + 1}`} />
-                                );
-                            }}
-                        >
-                            {items.map((item, i) => (
-                                <div key={i} style={{ textAlign: 'left' }}>
-                                    <h2>{item.title}</h2>
-                                    <p>{item.description}</p>
-                                </div>
-                            ))}
-                        </Carousel>
-                    </div>
+                                renderArrowNext={(onClickHandler, hasNext, label) =>
+                                    <div style={{ position: 'absolute', bottom: '10px', right: '10px' }}>
+                                        <button type="button" onClick={onClickHandler} title={label} style={{ background: 'none', border: 'none', outline: 'none', boxShadow: 'none', cursor: 'pointer', display: 'flex', padding: '20px' }}>
+                                            <ArrowForwardIosIcon style={{ fontSize: '3rem', color: hasNext ? 'white' : 'grey' }} />
+                                        </button>
+                                    </div>
+                                }
+                                renderIndicator={(onClickHandler, isSelected, index, label) => {
+                                    if (isSelected) {
+                                        return (
+                                            <li style={{ display: 'inline-block', background: '#FFFFFF', width: '128px', height: '6px', marginRight: '10px', marginTop: '32px' }} aria-label={`Selected: ${label} ${index + 1}`} title={`Selected: ${label} ${index + 1}`} />
+                                        );
+                                    }
+                                    return (
+                                        <li style={{ display: 'inline-block', background: '#222222', width: '128px', height: '6px', marginRight: '10px', marginTop: '32px' }} onClick={onClickHandler} onKeyDown={onClickHandler} value={index} key={index} role="button" tabIndex={0} title={`${label} ${index + 1}`} aria-label={`${label} ${index + 1}`} />
+                                    );
+                                }}
+                            >
+                                {items.map((item, i) => (
+                                    <div key={i} style={{ textAlign: 'left' }}>
+                                        <h2>{item.title}</h2>
+                                        <p>{item.description}</p>
+                                    </div>
+                                ))}
+                            </Carousel>
+                        </div>
+                    )}
                 </Grid>
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                     <Box
@@ -207,17 +242,17 @@ export default function SignInSide() {
                             alignItems: 'center',
                         }}
                     >
-                        <Grid container justifyContent="space-between" alignItems="center" p={'24px'}>
+                        <Grid container justifyContent="space-between" alignItems="center" m={4}>
                             <Grid item>
                                 <img src={darkMode ? logoDark : logo} alt="Logo" height={'31px'} />
                             </Grid>
                             <Grid item>
-                                <Link href="/create-account" color="#2196f3" variant="body2" sx={{ '&:hover': { color: '#009dbf' } }}>
+                                <Link href="/create-account" color="#2196f3" variant="body2" sx={{ '&:hover': { color: '#009dbf' }, fontSize: { xs: '18px' } }}>
                                     Criar conta
                                 </Link>
                             </Grid>
                         </Grid>
-                        <Box sx={{ width: '100%', mb: 2, p: '24px' }}>
+                        <Box sx={{ width: '100%', mb: 4 }}>
                             <Typography component="h1" variant="h1" sx={{ fontSize: '2rem', mb: 1, font: 'Inter', fontWeight: '600' }} align="left">
                                 Boas-Vindas!
                             </Typography>
@@ -227,19 +262,26 @@ export default function SignInSide() {
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-                            <IconButton sx={{ bgcolor: '#f9f9f9', border: '1px solid #151515', color: '#000000', m: 1, borderRadius: 8, width: { xs: '25%', sm: '150px', borderRadius: 6 }, '&:hover': { borderColor: '#1976d2', color: '#1976d2', bgcolor: '#f9f9f9' } }}><svg width="35" height="34" viewBox="0 0 35 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <IconButton sx={{ bgcolor: '#f9f9f9', border: '1px solid #151515', color: '#000000', m: 1, borderRadius: 8, width: { xs: '32%', sm: '150px', borderRadius: 6 }, '&:hover': { borderColor: '#1976d2', color: '#1976d2', bgcolor: '#f9f9f9' } }}><svg width="35" height="34" viewBox="0 0 35 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M23.0714 24.2857H11.9286C10.9818 24.2857 10.2143 23.5182 10.2143 22.5714V11.4286C10.2143 10.4818 10.9818 9.71428 11.9286 9.71428H23.0714C24.0182 9.71428 24.7857 10.4818 24.7857 11.4286V22.5714C24.7857 23.5182 24.0182 24.2857 23.0714 24.2857ZM11.9286 26C10.035 26 8.5 24.465 8.5 22.5714V11.4286C8.5 9.53502 10.035 8 11.9286 8H23.0714C24.965 8 26.5 9.53502 26.5 11.4286V22.5714C26.5 24.465 24.965 26 23.0714 26H11.9286Z" fill="#0E0E0E" />
                                 <path d="M18.0446 15.4744C18.0446 15.5849 18.1342 15.6744 18.2446 15.6744H19.9189C20.0747 15.6744 20.1707 15.8447 20.09 15.978L17.6144 20.0685C17.5337 20.2018 17.6297 20.3721 17.7855 20.3721H22.9452C23.0556 20.3721 23.1452 20.2826 23.1452 20.1721V18.8512C23.1452 18.7407 23.0556 18.6512 22.9452 18.6512H21.0164C20.8605 18.6512 20.7646 18.4806 20.8455 18.3474L23.3857 14.1643C23.4666 14.031 23.3707 13.8605 23.2148 13.8605H18.2446C18.1342 13.8605 18.0446 13.95 18.0446 14.0605V15.4744Z" fill="#0E0E0E" />
                                 <path d="M11.5693 15.4744C11.5693 15.5849 11.6589 15.6744 11.7693 15.6744H13.2598C13.3703 15.6744 13.4598 15.764 13.4598 15.8744V20.1721C13.4598 20.2826 13.5494 20.3721 13.6598 20.3721H15.3393C15.4498 20.3721 15.5393 20.2826 15.5393 20.1721V15.8744C15.5393 15.764 15.6289 15.6744 15.7393 15.6744H17.2298C17.3403 15.6744 17.4298 15.5849 17.4298 15.4744V14.0605C17.4298 13.95 17.3403 13.8605 17.2298 13.8605H11.7693C11.6589 13.8605 11.5693 13.95 11.5693 14.0605V15.4744Z" fill="#0E0E0E" />
                             </svg>
                             </IconButton>
-                            <IconButton sx={{ bgcolor: '#f9f9f9', border: '1px solid #151515', color: '#000000', m: 1, borderRadius: 8, width: { xs: '25%', sm: '150px', borderRadius: 6 }, '&:hover': { borderColor: '#1976d2', color: '#1976d2', bgcolor: '#f9f9f9' } }}><FacebookIcon color="inherit" /></IconButton>
-                            <IconButton sx={{ bgcolor: '#f9f9f9', border: '1px solid #151515', color: '#000000', m: 1, borderRadius: 8, width: { xs: '25%', sm: '150px', borderRadius: 6 }, '&:hover': { borderColor: '#1976d2', color: '#1976d2', bgcolor: '#f9f9f9' } }}><TwitterIcon color="inherit" /></IconButton>
-                            <IconButton sx={{ bgcolor: '#f9f9f9', border: '1px solid #151515', color: '#000000', m: 1, borderRadius: 8, width: { xs: '25%', sm: '150px', borderRadius: 6 }, '&:hover': { borderColor: '#1976d2', color: '#1976d2', bgcolor: '#f9f9f9' } }}><AppleIcon color="inherit" /></IconButton>
+                            <IconButton sx={{ bgcolor: '#f9f9f9', border: '1px solid #151515', color: '#000000', m: 1, borderRadius: 8, width: { xs: '32%', sm: '150px', borderRadius: 6 }, '&:hover': { borderColor: '#1976d2', color: '#1976d2', bgcolor: '#f9f9f9' } }}><FacebookIcon color="inherit" /></IconButton>
+                            <IconButton sx={{ bgcolor: '#f9f9f9', border: '1px solid #151515', color: '#000000', m: 1, borderRadius: 8, width: { xs: '32%', sm: '150px', borderRadius: 6 }, '&:hover': { borderColor: '#1976d2', color: '#1976d2', bgcolor: '#f9f9f9' } }}><TwitterIcon color="inherit" /></IconButton>
+                            <IconButton sx={{ bgcolor: '#f9f9f9', border: '1px solid #151515', color: '#000000', m: 1, borderRadius: 8, width: { xs: '32%', sm: '150px', borderRadius: 6 }, '&:hover': { borderColor: '#1976d2', color: '#1976d2', bgcolor: '#f9f9f9' } }}><AppleIcon color="inherit" /></IconButton>
                         </Box>
-                        <Typography component="h1" variant="h6" sx={{ fontSize: '1rem' }}>
-                            ou
-                        </Typography>
+                        {hidden && (
+                            <Typography component="h1" variant="h6" sx={{ fontSize: '1rem' }}>
+                                ou
+                            </Typography>
+                        )}
+                        {!hidden && (
+                            <Typography component="h1" variant="h6" sx={{ fontSize: '1.5rem', my: 2 }}>
+                                ou
+                            </Typography>
+                        )}
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 /* Adjust this value as needed */ }}>
                             <Typography component="h1" variant="h6" sx={{ fontSize: '0.8rem' }}>
                                 Usuário
