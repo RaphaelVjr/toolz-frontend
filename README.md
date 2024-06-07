@@ -10,15 +10,22 @@ Projeto designado a extrair dados dos extratos das faturas de luz, organizá-los
 ## Critérios de aceite
 
 
-Critérios de Avaliação:
+*Critérios de Avaliação:*
 
-Fidelidade ao Design:
+**Fidelidade ao Design:**
    - À semelhança do produto final com o design do Figma será o critério mais importante.
    - Detalhes como sombras, bordas, animações, e comportamento interativo serão considerados.
 
-Qualidade do Código:
+**Qualidade do Código:**
    - A clareza, organização e eficiência do código serão avaliadas.
    - A aplicação de padrões de projeto e boas práticas de codificação são valorizadas mas opcionais.
+
+
+**Usuário e Senha Mockados:**
+
+**user@toolz.com**
+
+**password123**
 
 
 
