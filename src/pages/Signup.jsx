@@ -26,7 +26,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import banner from '../assets/banner.jpeg'
 import logo from '../assets/image.png'
 import logoDark from '../assets/image-dark.png'
-import Hidden from '@mui/material/Hidden';
 import LockIcon from '@mui/icons-material/LockOutlined'
 
 function Copyright(props) {
@@ -84,12 +83,9 @@ export default function SignInSide() {
         const password = data.get('password');
 
         console.log({ email, password });
-
-        // Define your API endpoint
         const apiEndpoint = 'https://toolz-api.vercel.app/login';
 
         try {
-            // Make a POST request to the login endpoint
             const response = await fetch(apiEndpoint, {
                 method: 'POST',
                 headers: {
@@ -98,10 +94,6 @@ export default function SignInSide() {
                 body: JSON.stringify({ email, password })
             });
 
-            // Parse the JSON response
-            const responseData = await response.json();
-
-            // Check the response status
             if (response.ok) {
                 toast.success('Logado com sucesso!');
             } else if (response.status === 401) {
