@@ -86,7 +86,7 @@ export default function SignInSide() {
         const password = data.get('password');
 
         console.log({ email, password });
-        const apiEndpoint = 'https://toolz-api.vercel.app/login';
+        const apiEndpoint = 'http://localhost:3005/login';
 
         try {
             const response = await fetch(apiEndpoint, {
