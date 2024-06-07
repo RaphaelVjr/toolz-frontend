@@ -13,12 +13,12 @@
   }
 }
 
-.h1, .h2, .h3, .h4, .h5, .h6, p {
-  font-family: Inter;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 16.94px;
-  text-align: left;
+.typography {
+  font: Inter;
+}
+
+.carousel .control-dots {
+  text-align: left !important;
 }
 
 .App-header {
@@ -31,6 +31,12 @@
   font-size: calc(10px + 2vmin);
   color: #f9f9f9;
 }
+
+.g-recaptcha {
+  transform:scale(0.95); /* Adjust scale as needed */
+  transform-origin:0 0;
+}
+
 
 .App-link {
   color: #61dafb;
