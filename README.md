@@ -54,7 +54,10 @@ git checkout develop
 
 ## Features futuras :rocket:
 
-- Login
+- JWT
+- Dashboards
+- Verificação de tamanho, caracteres especiais na senha
+- Login SSO pela google, facebook e twitter
 
 
 
