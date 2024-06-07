@@ -339,7 +339,7 @@ export default function SignInSide() {
                             </div>
                         )}
 
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 /* Adjust this value as needed */ }}>
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1}}>
                             <Typography component="h1" variant="h6" sx={{ fontSize: '1rem' }}>
                                 Usuário
                             </Typography>
