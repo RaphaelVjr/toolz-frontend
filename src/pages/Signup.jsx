@@ -86,7 +86,7 @@ export default function SignInSide() {
         console.log({ email, password });
 
         // Define your API endpoint
-        const apiEndpoint = 'http://localhost:3005/login';
+        const apiEndpoint = 'https://toolz-api.vercel.app/login';
 
         try {
             // Make a POST request to the login endpoint
