@@ -1,8 +1,6 @@
 import * as React from 'react';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import HorizontalRuleOutlinedIcon from '@mui/icons-material/HorizontalRuleOutlined';
-import onChange from 'react';
 import AppleIcon from '@mui/icons-material/Apple';
 import { Carousel } from 'react-responsive-carousel';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
