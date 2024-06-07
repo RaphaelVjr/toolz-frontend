@@ -13,6 +13,14 @@
   }
 }
 
+.h1, .h2, .h3, .h4, .h5, .h6, p {
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.94px;
+  text-align: left;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -21,11 +29,41 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #f9f9f9;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.container {
+  bottom: 0;
+  height: 25vh;
+  margin: 25px;
+  position: absolute;
+  display: flex;
+  margin-bottom: 50px;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.carousel .slider-wrapper {
+  height: 180px;
+}
+
+.carousel.carousel-slider {
+  height: 100%;
+}
+
+.carousel .prev-arrow {
+  cursor: pointer;
+  background-color: none;
+  
+}
+
+.carousel.button {
+  color: none;
+  background-color: none;
 }
 
 @keyframes App-logo-spin {
